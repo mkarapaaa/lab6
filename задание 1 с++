@@ -1,0 +1,53 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+double f(double x1, double x2) {
+    return x1 * x1 + 3 * x2 * x2 + cos(x1 + x2);
+}
+
+int main() {
+    double x1 = 0.0, x2 = 0.0; // Начальные значения переменных
+    double step = 0.01; // Шаг для поиска
+    double tol = 1e-6; // точность
+
+ 
+    while (true) {
+        double f_old = f(x1, x2);
+        double x1_new = x1, x2_new = x2;
+
+        // Поиск по x1
+        double x1_temp = x1 - step;
+        if (f(x1_temp, x2) < f_old) {
+            x1_new = x1_temp;
+        } else {
+            x1_temp = x1 + step;
+            if (f(x1_temp, x2) < f_old) {
+                x1_new = x1_temp;
+            }
+        }
+
+        // Поиск по x2
+        double x2_temp = x2 - step;
+        if (f(x1, x2_temp) < f_old) {
+            x2_new = x2_temp;
+        } else {
+            x2_temp = x2 + step;
+            if (f(x1, x2_temp) < f_old) {
+                x2_new = x2_temp;
+            }
+        }
+
+        // Проверка на сходимость
+        if (abs(x1_new - x1) < tol && abs(x2_new - x2) < tol) {
+            cout << "Оптимальное решение: x1 = " << x1_new << ", x2 = " << x2_new << endl;
+            cout << "Значение функции: " << f(x1_new, x2_new) << endl;
+            break;
+        }
+
+        x1 = x1_new;
+        x2 = x2_new;
+    }
+
+    return 0;
+}
